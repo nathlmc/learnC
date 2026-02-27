@@ -1,0 +1,8 @@
+.vscode/
+.DS_Store
+.dSYM
+.out
+hello
+hello.dSYM
+fahrenheitConversion
+fahrenheitConversion.dSYM
