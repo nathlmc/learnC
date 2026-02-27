@@ -1,3 +1,5 @@
+## Ignoring output files as of now
+*.exe
 .vscode/
 .DS_Store
 .dSYM
