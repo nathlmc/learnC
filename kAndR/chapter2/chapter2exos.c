@@ -7,6 +7,10 @@
 int atoi(char s[]); // atoi: convert s to integer --> char to int conversion example
 int lower(int c);
 int htoi(char s[]); // htoi: convert string of hex to equivalent int value
+void squeeze(char s[], int c); // squeeze: delete all c from s
+void strcat(char s[], char t[]); // concatenate t to end of s; s must be big enough. Std library ver rets a pointer to resing str
+void altsqueeze(char s1[], char s2[]); // Exercise 2-4, alt ver of squeeze. dels each char in s1 that matches any char in s2
+int any(char s1[], char s2[]);  // Exercise 2-5, returns first location in s1 where any char from s2 occurs, -1 if none
 
 int main()
 {
@@ -47,7 +51,7 @@ int main()
         }
     }
     */
-
+    /*
     // Exercise 2-3 Write the function htoi(s), which converts a string of hexadecimal digits (including an optional 0x or 0X)
     printf("%d\n", htoi("1"));
     printf("%d\n", htoi("0x1"));
@@ -55,7 +59,22 @@ int main()
     printf("%d\n", htoi("A"));
     printf("%d\n", htoi("F"));
     printf("%d\n", htoi("0x45A3e9"));
+    */
+    /*
+    // Exercise 2-4 Write an alt ve of squeeze that deletes each character in s1 that matches any character in the string s2
+    char s1[] = "Geeks are cool";
+    char s2[] = "Geeks";
+    altsqueeze(s1, s2);
+    printf("%s\n", s1);
+    */
 
+    // Exercise 2-5 Write the function any(s1, s2), which returns the first loc in s1 where any char from s2 occurs, or -1 if none
+    char s1[] = "Geeks are cool";
+    char s2[] = "Geeks";
+    char s3[] = "abc";
+    char s4[] = "def";
+    printf("%s and %s are similar at: %d (not same if -1)\n", s1, s2, any(s1, s2));
+    printf("%s and %s are similar at: %d (not same if -1)\n", s3, s4, any(s3, s4));
     return 0;
 }
 
@@ -133,4 +152,55 @@ int htoi(char s[]) // Exercise 2-3 Write the function htoi(s), which converts a 
     }
 
     return n;
+}
+
+void squeeze(char s[], int c) // squeeze: delete all c from s
+{
+    int i, j;
+
+    for (i = j = 0; s[i] != '\0'; i++)
+        if (s[i] != c)
+            s[j++] = s[i];
+            // equivalent to s[j] = s[i]; j++;
+    s[j] = '\0';
+}
+
+void strcat(char s[], char t[]) // concatenate t to end of s; s must be big enough. Std library ver rets a pointer to resing str
+{
+    int i, j;
+
+    i = j = 0;
+    while (s[i] != '\0')    // find end of s
+        i++;
+    while ((s[i++] = t[j++]) != '\0') // copy t
+        ;
+}
+
+void altsqueeze(char s1[], char s2[]) // Exercise 2-4, alt ver of squeeze. dels each char in s1 that matches any char in s2
+{
+    int i, j, k;
+    
+    for (i = j = 0; s1[i] != '\0'; i++) {
+        int check = 0;
+        for (k = 0; s2[k] != '\0'; k++)
+            if (s1[i] == s2[k]) {
+                check = 1;
+                break;
+            }
+        if (check == 0)
+            s1[j++] = s1[i];
+    }
+                
+    s1[j] = '\0';
+}
+
+int any(char s1[], char s2[])  // Exercise 2-5, returns first location in s1 where any char from s2 occurs, -1 if none
+{
+    int i, j;
+    for (i = 0; s1[i] != '\0'; i++) {
+        for (j = 0; s2[j] != '\0'; j++)
+            if (s1[i] == s2[j])
+                return i;
+    }
+    return -1;
 }
