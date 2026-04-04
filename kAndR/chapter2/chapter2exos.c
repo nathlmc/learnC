@@ -15,6 +15,9 @@ unsigned getbits(unsigned x, int p, int n); // getbits: get n bits from position
 unsigned setbits(unsigned x, int p, int n, unsigned y); // Exercise 2-6
 unsigned invert(unsigned x, int p, int n); // Exercise 2-7
 unsigned rightrot(unsigned x, int n); // Exercise 2-8
+int bitcount(unsigned x); // bitcount: count 1 bits in x
+int fasterbitcount(unsigned x); // Exercise 2-9
+int alttolower(int c); // Exercise 2-10
 
 int main()
 {
@@ -104,7 +107,7 @@ int main()
     // should get 11000100
     printf("%u\n", invert(0b11001010, 3, 3));
     */
-
+    /*
     // Exercise 2-8
     // Exercise 2-8. Write a function rightrot(x,n) that returns the value of the integer x rotated to the right by n bit positions.
     // Rotate by 1, rightmost bit wraps to top
@@ -121,6 +124,32 @@ int main()
 
     // Rotate by 0 should give back original
     printf("%u\n", rightrot(0b11001010, 0));
+    */
+    /*
+    // Exercise 2-9 [...] Use this observation to write a faster version of bitcount.
+    printf("%d\n", bitcount(0b10000001) == fasterbitcount(0b10000001));
+    printf("%d\n", bitcount(0b10000001) == fasterbitcount(0b00000000));
+    printf("%d\n", bitcount(0b00000000) == fasterbitcount(0b00000000));
+    */
+    // Condition expressions
+    int a, b, z;
+    a = 1;
+    b = 2;
+    if (a > b)
+        z = a;
+    else
+        z = b;
+    // same as expr1 ? expr 2 : expr 3
+    z = (a > b) ? a : b; // z = max(a, b)
+
+    // Prints n elems of array, 10 per line, with each col separated by one blank, each line (including last) with newline
+    // printf("%6d%c", a[i], (i%10==9 || i==n-1) ? '\n': ' ');
+
+    n = 1;
+    printf("You have %d item%s.\n", n, n==1 ? "" : "s");
+
+    printf("%d", tolower('C') == alttolower('C'));
+    
     return 0;
 }
 
@@ -278,4 +307,36 @@ unsigned rightrot(unsigned x, int n)
 {
     unsigned y = getbits(x, n - 1, n);  // rightmost n bits of x, which are at positions n-1 down to 0
     return (x >> n) | (y << (sizeof(x) * 8 - n));   // shift x by n | shift y and place them at top of word
+}
+
+int bitcount(unsigned x) // bitcount: count 1 bits in x
+{
+    int b;
+
+    for (b = 0; x != 0; x >>= 1)
+        if (x & 01)
+            b++;
+    return b;
+}
+
+int fasterbitcount(unsigned x)
+// Exercise 2-9. In a 2's complement system, x &= (x - 1) deletes the rightmost 1-bit in x. Explain why.
+// Use this observation to write a faster version of bitcount
+{
+    /*
+    This works because when we substract 1 from x, all the 0s to the right of that 1 becomes 1.
+    & with original x we get the same number but without that 1 to the right (all other 1s are masked out by
+    the original 0s). Only works because of two's complement and how it reps negative numbers and performs substraction
+
+    */ 
+    int b;
+    for (b = 0; x != 0; x &= (x - 1))
+        b++;
+    return b;
+}
+
+int alttolower(int c)
+// Exercise 2-10. Rewrite the function lower with a conditional expr instead of if-else
+{
+    return (c >= 'A' && c <= 'Z') ? c + 'a' - 'A' : c;
 }
