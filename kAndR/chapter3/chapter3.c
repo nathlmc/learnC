@@ -14,6 +14,7 @@ void itoa(int n, char s[]);	// itoa: convert n to characters in s
 void itoatwo(int n, char s[]); // Exercise 3-4
 void itob(int n, char s[], int b);	// Exercise 3-5
 void itoathree(int n, char s[], int width);	// Exercise 3-6
+int trim(char s[]);	// trim: remove trailing blanks, tabs, newline
 
 int main()
 {
@@ -134,13 +135,33 @@ int main()
 	itob(a, string1, 2);
 	printf("%s\n", string1);
 	*/
-
+	/*
 	// Exercise 3-6
 	int a = 150;
 	char string1[20];
 	itoathree(a, string1, 20);
 	printf("%s\n", string1);
     return 0;
+	*/
+
+	// Test trim if string is empty
+	char string1[] = "";
+	printf("String before trim:%s", string1); 
+	int n = trim(string1);
+	printf("and after:%s. n = %d\n", string1, n);
+	// Test if only white space
+	char string2[] = "     ";
+	printf("String before trim:%s", string2);
+	int n2 = trim(string2);
+	printf("and after:%s. n = %d\n", string2, n2);
+
+	/* Example of **continue**
+	for (i = 0; i < n; i++)	{
+		if (a[i] < 0)	// skip negative elements
+			continue;
+		... // do positive elements	
+	}	
+	*/
 }
 
 int binsearch(int x, int v[], int n)
@@ -429,4 +450,15 @@ necessary to make it wide enough.
 	s[i] = '\0';
 
 	reverse(s);
+}
+
+int trim(char s[])	// trim: remove trailing blanks, tabs, newline
+{
+	int n;
+
+	for (n = strlen(s) - 1; n >= 0; n--)
+		if (s[n] != ' ' && s[n] != '\t' && s[n] != '\n')
+			break;
+	s[n+1] = '\0';
+	return n;
 }
