@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h> // for atof()
 #include <ctype.h>
+#include <math.h>
+#include <string.h>	// for strcmp()
 
 #define MAXOP   100 // max size of operand or operator
 #define MAXVAL	100 // maximum depth of val stack
 #define NUMBER  '0' // signal that a number was found
 #define BUFSIZE	100
+#define FUNCTION 'f'	// Exercise 4-5	
 
 int getch(void);
 void ungetch(int);
@@ -28,6 +31,11 @@ Add commands to print the top element of the stack without popping, to duplicate
 Add a command to clear the stack.
 */
 
+/*
+Exercise 4-5.
+Add access to library functions like sin, exp, and pow. See <math.h> in Appendix B, Section 4.
+*/
+
 // reverse Polish calculator
 int main()
 {
@@ -39,6 +47,16 @@ int main()
 		switch (type)   {
 			case NUMBER:
 				push(atof(s));
+				break;
+			case FUNCTION:
+				if (strcmp(s, "sin") == 0)
+					push(sin(pop()));
+				else if (strcmp(s, "exp") == 0)
+					push(exp(pop()));
+				else if (strcmp(s, "pow") == 0)	{	// Domain error occurs if x = 0 and y <= 0, or if x < 0 and y is not an integer
+					op2 = pop();
+					push(pow(pop(), op2));
+				}
 				break;
 			case '+':
 				push(pop() + pop());
@@ -126,7 +144,23 @@ int getop(char s[])	// getop: get next operator or numeric operand
 		ungetch(c2);				
 
 	if (!isdigit(c) && i < 2 && c != '.')	{
-		return c;	// not a number
+		if (c == '\n')
+			return '\n';
+		if (c == EOF)
+			return EOF;
+		c2 = getch();
+		if (!isalpha(c2))	{
+			ungetch(c2);
+			return c;	// not a number, one char op
+		}
+		else	{	// Exercise 4-5
+			s[i] = tolower(c);
+			s[++i] = tolower(c2);
+			while (isalpha(c2 = getch()))
+				s[++i] = tolower(c2);
+			ungetch(c2);	// push back extra character
+			return FUNCTION;
+		}
 	}
 	if (isdigit(c))	// collect integer part
 		while (isdigit(s[++i] = c = getch()))
