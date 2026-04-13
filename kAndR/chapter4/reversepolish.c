@@ -12,11 +12,21 @@ void ungetch(int);
 int getop(char []);
 void push(double);
 double pop(void);
+void peek(void);		// Exercise 4-4, top elem of the stack
+void duplicate(void);	// Exercise 4-4, duplicate top elem of the stack
+void swap(void);		// Exercise 4-4, swap top two elems
+void clear(void);		// Exercise 4-4, clear stack
 
 int sp = 0;			// next free stack position
 double val[MAXVAL];	// value stack
 char buf[BUFSIZE];	// buffer for ungetch
 int bufp = 0;		// next free position in buf
+
+/*
+Exercise 4-4. 
+Add commands to print the top element of the stack without popping, to duplicate it, and to swap the top two elements. 
+Add a command to clear the stack.
+*/
 
 // reverse Polish calculator
 int main()
@@ -57,6 +67,18 @@ int main()
 				break;
 			case '\n':
 				printf("\t%.8g\n", pop());
+				break;
+			case 'p':	// peek at top element
+				peek();
+				break;
+			case 'd':	// duplicate top element
+				duplicate();
+				break;
+			case 's':	// swap top two elements
+				swap();
+				break;
+			case 'c':
+				clear();
 				break;
 			default:
 				printf("error: unknown command %s\n", s);
@@ -129,4 +151,44 @@ void ungetch(int c)	// push character back on input
 		printf("ungetch: too many characters\n");
 	else
 		buf[bufp++] = c;
+}
+
+
+void peek(void)		// Exercise 4-4, top elem of the stack
+{
+	if (sp > 0)
+		printf("Top of stack:%f\n", val[sp - 1]);
+	else
+		printf("Stack is empty\n");
+}
+
+void duplicate(void)	// Exercise 4-4, duplicate top elem of the stack
+{
+	if (sp > 0)	{
+		val[sp] = val[sp - 1];
+		sp++;
+	}
+	else
+		printf("Stack is empty\n");
+}
+
+void swap(void)		// Exercise 4-4, swap top two elems
+{
+	double a;
+	if (sp > 1)	{
+		a = val[sp - 1];
+		val[sp - 1] = val[sp - 2];
+		val[sp - 2] = a;
+	}
+	else
+		printf("Stack does not have enough elements to swap\n");
+}
+
+void clear(void)		// Exercise 4-4, clear stack
+{
+	while (sp > 0)	{
+		val[sp] = 0.0;
+		sp--;
+	}
+	printf("Stack cleared\n");
 }
