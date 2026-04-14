@@ -20,13 +20,17 @@ void peek(void);		// Exercise 4-4, top elem of the stack
 void duplicate(void);	// Exercise 4-4, duplicate top elem of the stack
 void swap(void);		// Exercise 4-4, swap top two elems
 void clear(void);		// Exercise 4-4, clear stack
+void ungets(char s[]);	// Exercise 4-7, push back entire string onto the input
+int getchtwo(void);		// Exercise 4-8
+void ungetchtwo(int);	// Exercise 4-8
 
 int sp = 0;			// next free stack position
 double val[MAXVAL];	// value stack
-char buf[BUFSIZE];	// buffer for ungetch
+int buf[BUFSIZE];	// buffer for ungetch. Exercise 4-9: char buf[BUFSIZE] -> int buf [BUFSIZE]
 int bufp = 0;		// next free position in buf
 double variables[26];	// variables. Exercise 4-6. Index would be s[0] - 'A'.
 double lastprinted = 0.0;	// store recently printed value
+int pushback = -2;		// buffer for pushback
 
 /*
 Exercise 4-4. 
@@ -44,7 +48,32 @@ Exercise 4-6.
 Add commands for handling variables. (It's easy to provide twenty-six variables with single-letter names.)
 Add a variable for the most recently printed value.
 
---> We treat variables as between A - Z
+--> We treat variables as between A - Z. If there's an invalid input, say 3 =a 4 =b a b +, =a and =b are 
+ignored, a b treated as invalid commands. So would parse as 3 4 +.
+*/
+
+/*
+Exercise 4-7.
+Write a routine ungets(s) that will push back an entire string onto the input. Should ungets know about buf
+and bufp, or should it just use ungetch?
+
+Just use ungetch. Technically could do same thing I did with stack (which I technically shouldn't have done)
+but better to abstract implementation.
+*/
+
+/*
+Exercise 4-8.
+Suppose that there will never be more than one character of pushback. Modify getch and ungetch accordingly.
+-> Keeping getch and ungetch. Adding getchtwo and ungetchtwo.
+*/
+
+/*
+Exercise 4-9.
+Our getch and ungetch do not handle a pushed-back EOF correctly. Decide what their properties ought to be if 
+an EOF is pushed back, then implement your design.
+
+char could be signed depending on machine --> EOF can be out of range. So change from char to either signed char
+or int.
 */
 
 // reverse Polish calculator
@@ -258,4 +287,31 @@ void clear(void)		// Exercise 4-4, clear stack
 		sp--;
 	}
 	printf("Stack cleared\n");
+}
+
+void ungets(char s[])	// Exercise 4-7, ungets
+{
+	int i = strlen(s) - 1;	// Exclude null terminator
+	while (i >= 0)
+		ungetch(s[i--]);
+}
+
+int getchtwo(void)	// Exercise 4-8, get a (possibly pushed back) character
+{	// Note: use int since EOF is -1. 
+	if (pushback != -2)	{
+		int new = pushback;
+		pushback = -2;	// reset to no pushed backs
+		return new;
+	}
+	else
+		return getchar();
+}
+
+void ungetchtwo(int c)	// Exercise 4-8, push character back
+{
+	if (pushback == -2)	// there is space
+		pushback = c;
+	else	{
+		printf("Ungetch: There is already a character pushed back");
+	}
 }
