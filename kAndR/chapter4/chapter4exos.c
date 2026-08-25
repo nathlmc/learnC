@@ -7,7 +7,7 @@
 
 int strrindex(char source[], char searchfor[]); // Exercise 4-1
 double atofextended(char s[]);  // Exercise 4-2
-
+void recursiveitoa(int n, int i, char s[]); // Exercise 4-12
 
 int main()
 {
@@ -77,4 +77,32 @@ followed by e or E and an optionally signed exponent.
         }
     }
     return (sign * val / power) * exponent;
+}
+
+void recursiveitoa(int n, int i, char s[]) // Exercise 4-12
+/*
+Adapt the ideas of printd to write a recursive version of itoa; that is, convert
+an integer into a string by calling a recursive routine.
+*/
+{
+    int static i = 0;   // Static. Only initialized once. Downside would be
+                        // that future calls to recursiveitoa would not work            
+    int sign, a;
+
+    if ((sign = n) < 0) // record sign since working in reverse
+        n = -n;
+    
+    if (n / 10) {
+        if ((a = (n/= 10))) {
+            recursiveitoa(a, s);
+            
+        }
+            
+    }
+        recursiveitoa(n /= 10, s);
+    
+     
+    if (!(n / 10))
+        s[n] = n % 10 + '0';
+
 }

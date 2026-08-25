@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+#include <ctype.h>
 
 int binsearch(int x, int v[], int n); // binsearch: find x in v[0] <= v[1] <= ... <= v[n-1]
 int altbinsearch(int x, int v[], int n);    // Exercise 3-1

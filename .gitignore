@@ -4,6 +4,7 @@
 .DS_Store
 .dSYM
 .out
+*.out
 hello
 hello.dSYM
 fahrenheitConversion
