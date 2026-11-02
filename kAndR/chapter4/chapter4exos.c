@@ -8,6 +8,8 @@
 int strrindex(char source[], char searchfor[]); // Exercise 4-1
 double atofextended(char s[]);  // Exercise 4-2
 int recursiveitoa(int n, int i, char s[]); // Exercise 4-12
+void reverseHelper(char s[], int i, int j);
+void reverse(char s[]);	// Exercise 4-13
 
 int main()
 {
@@ -18,6 +20,7 @@ int main()
 	char string2[] = "123.45e6";
 	printf("%.10f\n", atofextended(string2));
 
+	/*
 	// Exercise 4-12
 	char test1[20];
 	recursiveitoa(2, 0, test1);
@@ -29,6 +32,16 @@ int main()
 	char test2[20];
 	recursiveitoa(50000, 0, test2);
 	printf("\n%s\n", test2);
+	*/
+
+	// Exercise 4-13
+	char test1[] = "could";
+	reverse(test1);
+	printf("%s", test1);
+
+	char test2[] = "";
+	reverse(test2);
+	printf("%s", test2);
 
 	
 	return 0;
@@ -117,4 +130,27 @@ an integer into a string by calling a recursive routine.
 		else
 			return 0;
 	}        
+}
+
+void reverseHelper(char s[], int i, int j)
+{
+	if (i >= j)	// Base case, when i < j no longer true
+		return;
+	else	{
+		int c = s[i];
+		s[i] = s[j];
+		s[j] = c;
+		reverseHelper(s, ++i, --j);
+	}
+}
+
+void reverse(char s[])	// Exercise 4-13
+/*
+Write a recursive version of the function reverse(s), which reverses the string
+s in place
+*/
+{
+	int a = strlen(s);
+	if (a > 1)
+		reverseHelper(s, 0, a - 1);
 }
