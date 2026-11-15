@@ -3,6 +3,15 @@
 #include <ctype.h>
 #include <float.h>
 
+#define SWAP(t, x, y)	\
+	do	\
+	{	\
+		t TEMPA = x;	\
+		x = y;	\
+		y = TEMPA;	\
+	} while (0)	\
+
+
 #define MAXLINE 1000    // maximum input line length
 
 int strrindex(char source[], char searchfor[]); // Exercise 4-1
@@ -32,7 +41,6 @@ int main()
 	char test2[20];
 	recursiveitoa(50000, 0, test2);
 	printf("\n%s\n", test2);
-	*/
 
 	// Exercise 4-13
 	char test1[] = "could";
@@ -43,6 +51,33 @@ int main()
 	reverse(test2);
 	printf("%s", test2);
 
+	*/
+
+	// Exercise 4-14
+	// Simple test
+	int a, b;
+	a = 1;
+	b = 3;
+	printf("a is %d, b is %d\n", a, b);
+	SWAP(int, a, b);
+	printf("a is %d, b is %d\n", a, b);
+
+	// Index test
+	int v[] = {1,2,3,4,5};
+	int i, j;
+	j = 4;
+	for (i = 0; i < 5; i++)
+		printf("At v[%d]: v = %d\n", i, v[i]);
+	i = 0;
+	SWAP(int, v[i++], v[j]);
+	for (i = 0; i < 5; i++)
+		printf("At v[%d]: v = %d\n", i, v[i]);
+
+	// If-else test
+	if (a < b)
+		SWAP(int, a, b);
+	else
+		printf("a > b\n");
 	
 	return 0;
 }
